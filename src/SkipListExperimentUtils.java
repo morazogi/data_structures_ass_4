@@ -43,12 +43,15 @@ public class SkipListExperimentUtils {
         }
         long finish = System.currentTimeMillis();
         Double timeElapsed = (double) (finish - start);
-        Pair<AbstractSkipList, Double> ans = new Pair<AbstractSkipList, Double>(test,timeElapsed);
-        return ans;
+        return new Pair<>(test, timeElapsed);
     }
 
     public static double measureSearch(AbstractSkipList skipList, int size) {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        long start = System.currentTimeMillis();
+        int search = (int) (Math.random()*size);
+        skipList.search(2*search);
+        long finish = System.currentTimeMillis();
+        return (double) (finish - start)*1000;
     }
 
     public static double measureDeletions(AbstractSkipList skipList, int size) {
