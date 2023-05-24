@@ -40,6 +40,7 @@ public class SkipListExperimentUtils {
                 x = (int) (Math.random()*size);
             }
             test.insert(exs[x]);
+            ex[x] = true;
         }
         long finish = System.currentTimeMillis();
         Double timeElapsed = (double) (finish - start);
@@ -55,7 +56,23 @@ public class SkipListExperimentUtils {
     }
 
     public static double measureDeletions(AbstractSkipList skipList, int size) {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        double timeElapsed = 0;
+        boolean[] ex = new boolean[size];
+        for (int i = 0 ; i < size; i++) {
+            ex[i] = false;
+        }
+        for (int i = 0 ; i < size; i++){
+            int x = (int) (Math.random()*size);
+            while (ex[x]){
+                x = (int) (Math.random()*size);
+            }
+            AbstractSkipList.Node node_to_remove = skipList.search(2*x);
+            long start = System.currentTimeMillis();
+            skipList.delete(node_to_remove);
+            timeElapsed = timeElapsed + (System.currentTimeMillis()-start);
+            ex[x] = true;
+        }
+        return timeElapsed/size;
     }
 
     public static void main(String[] args) {
