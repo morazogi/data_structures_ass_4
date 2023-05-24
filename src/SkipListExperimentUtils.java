@@ -26,8 +26,8 @@ public class SkipListExperimentUtils {
      * 6. Return the DS and the difference between the times from 3 and 5.
      */
     public static Pair<AbstractSkipList, Double> measureInsertions(double p, int size) {
-        long start = System.currentTimeMillis();
         AbstractSkipList test = new IndexableSkipList(p);
+        Double timeElapsed = 0.0;
         int[] exs = new int[size];
         boolean[] ex = new boolean[size];
         for (int i = 0 ; i < size; i++) {
@@ -39,20 +39,33 @@ public class SkipListExperimentUtils {
             while (ex[x]){
                 x = (int) (Math.random()*size);
             }
+            long start = System.currentTimeMillis();
             test.insert(exs[x]);
+            long finish = System.currentTimeMillis();
+            timeElapsed = timeElapsed + (double) (finish - start);
             ex[x] = true;
         }
-        long finish = System.currentTimeMillis();
-        Double timeElapsed = (double) (finish - start);
-        return new Pair<>(test, timeElapsed);
+        return new Pair<>(test, timeElapsed/size);
     }
 
     public static double measureSearch(AbstractSkipList skipList, int size) {
-        long start = System.currentTimeMillis();
-        int search = (int) (Math.random()*size);
-        skipList.search(2*search);
-        long finish = System.currentTimeMillis();
-        return (double) (finish - start)*1000;
+        Double timeElapsed = 0.0;
+        boolean[] ex = new boolean[size];
+        for (int i = 0 ; i < size; i++) {
+            ex[i] = false;
+        }
+        for (int i = 0 ; i < size; i++){
+            int x = (int) (Math.random()*size);
+            while (ex[x]){
+                x = (int) (Math.random()*size);
+            }
+            long start = System.currentTimeMillis();
+            skipList.search(2*x);
+            long finish = System.currentTimeMillis();
+            timeElapsed = timeElapsed + (double) (finish - start);
+            ex[x] = true;
+        }
+        return timeElapsed/size;
     }
 
     public static double measureDeletions(AbstractSkipList skipList, int size) {
