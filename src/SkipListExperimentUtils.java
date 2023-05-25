@@ -39,9 +39,9 @@ public class SkipListExperimentUtils {
             while (ex[x]){
                 x = (int) (Math.random()*size);
             }
-            long start = System.currentTimeMillis();
+            long start = System.nanoTime();
             test.insert(exs[x]);
-            long finish = System.currentTimeMillis();
+            long finish = System.nanoTime();
             timeElapsed = timeElapsed + (double) (finish - start);
             ex[x] = true;
         }
@@ -59,9 +59,9 @@ public class SkipListExperimentUtils {
             while (ex[x]){
                 x = (int) (Math.random()*size);
             }
-            long start = System.currentTimeMillis();
+            long start = System.nanoTime();
             skipList.search(2*x);
-            long finish = System.currentTimeMillis();
+            long finish = System.nanoTime();
             timeElapsed = timeElapsed + (double) (finish - start);
             ex[x] = true;
         }
@@ -80,9 +80,9 @@ public class SkipListExperimentUtils {
                 x = (int) (Math.random()*size);
             }
             AbstractSkipList.Node node_to_remove = skipList.search(2*x);
-            long start = System.currentTimeMillis();
+            long start = System.nanoTime();
             skipList.delete(node_to_remove);
-            timeElapsed = timeElapsed + (System.currentTimeMillis()-start);
+            timeElapsed = timeElapsed + (System.nanoTime()-start);
             ex[x] = true;
         }
         return timeElapsed/size;
@@ -187,8 +187,22 @@ public class SkipListExperimentUtils {
 //        third =  ((ex-temp1) + (ex-temp2) + (ex-temp3) + (ex-temp4) + (ex-temp5));
 //        third = third/5;
 //        System.out.println("third = " + third);
-//------------
 
+//-----------
+        int x = 1000;
+        double p = 0.33;
+        double insert_expirement_sum =0;
+        double search_expirement_sum =0;
+        double deletion_expirement_sum =0;
+        for (int i = 0; i < 30; i++) {
+            Pair<AbstractSkipList,Double> res = measureInsertions(p, x);
+            insert_expirement_sum+=res.second();
+            search_expirement_sum+=measureSearch(res.first(), x);
+            deletion_expirement_sum+=measureDeletions(res.first(), x);
+        }
+        System.out.println("insert - "+ (insert_expirement_sum/30));
+        System.out.println("search - "+ (search_expirement_sum/30));
+        System.out.println("deletion - "+ (deletion_expirement_sum/30));
 
 
 
