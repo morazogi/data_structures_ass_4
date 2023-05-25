@@ -15,7 +15,7 @@ public class IndexableSkipList extends AbstractSkipList {
             } else if (current.getNext(is_key_in_level).key()<key) {
                 current = current.getNext(is_key_in_level);
             } else {
-                return current;
+                return current.getNext(is_key_in_level);
             }
         }
         return current;

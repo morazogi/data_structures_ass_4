@@ -26,7 +26,7 @@ public class SkipListExperimentUtils {
      * 6. Return the DS and the difference between the times from 3 and 5.
      */
     public static Pair<AbstractSkipList, Double> measureInsertions(double p, int size) {
-        AbstractSkipList test = new IndexableSkipList(p);
+        IndexableSkipList test = new IndexableSkipList(p);
         Double timeElapsed = 0.0;
         int[] exs = new int[size];
         boolean[] ex = new boolean[size];
@@ -79,7 +79,7 @@ public class SkipListExperimentUtils {
             while (ex[x]){
                 x = (int) (Math.random()*size);
             }
-            AbstractSkipList.Node node_to_remove = skipList.search(2*x);
+            IndexableSkipList.Node node_to_remove = skipList.search(2*x);
             long start = System.nanoTime();
             skipList.delete(node_to_remove);
             timeElapsed = timeElapsed + (System.nanoTime()-start);
