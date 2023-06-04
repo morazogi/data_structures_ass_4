@@ -20,6 +20,7 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         this.maxLoadFactor = maxLoadFactor;
         this.capacity = 1 << k;
         this.hashFunc = hashFactory.pickHash(k);
+        this.size = 0;
         this.hash = new LinkedList[capacity];
     }
     public V search(K key) {
