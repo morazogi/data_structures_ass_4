@@ -2,6 +2,8 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
         int c = 'A';
-        System.out.println(c);
+        int k = 3;
+        System.out.println(1<<k);
+        System.out.println(Math.pow(2,k));
     }
 }

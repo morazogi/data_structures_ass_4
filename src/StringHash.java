@@ -37,7 +37,7 @@ public class StringHash implements HashFactory<String> {
                 int x = key.charAt(i);
                 ans += utils.mod(x*(utils.mod((long) Math.pow(c,k-i) , q)), q);
             }
-            utils.mod(ans,q);
+            ans = utils.mod(ans,q);
             return carterWegmanHash.hash(ans);
         }
         public int c() {

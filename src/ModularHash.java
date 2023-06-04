@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class ModularHash implements HashFactory<Integer> {
-    private HashingUtils utils ;
+    private final HashingUtils utils ;
     public ModularHash() {
         this.utils = new HashingUtils();
     }
@@ -23,7 +23,7 @@ public class ModularHash implements HashFactory<Integer> {
         final private int m;
         @Override
         public int hash(Integer key) {
-            return (int) (utils.mod(utils.mod(a*key+b,p),m));
+            return (int) (utils.mod(utils.mod((long) a *key+b,p),m));
         }
         public Functor(int a, int b, int m, long p){
             this.a = a;
