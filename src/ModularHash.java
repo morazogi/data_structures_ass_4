@@ -8,10 +8,10 @@ public class ModularHash implements HashFactory<Integer> {
 
     @Override
     public HashFunctor<Integer> pickHash(int k) {
-        Integer[] nums = utils.genUniqueIntegers(3);
-        int a = nums[1];
-        int b = nums[2];
-        int m = nums[3];
+        Integer[] nums = utils.genUniqueIntegers(2);
+        int a = nums[0];
+        int b = nums[1];
+        int m = k;
         long p = utils.genLong(Integer.MAX_VALUE + 1, Long.MAX_VALUE);
         return new Functor(a,b,m,p);
     }
