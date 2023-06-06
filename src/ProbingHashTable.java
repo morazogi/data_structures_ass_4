@@ -51,12 +51,13 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
             }
         }
         size++;
-        if (size/capacity>maxLoadFactor){
+        boolean rehash = (size/capacity())>=maxLoadFactor;
+        if (rehash){
             this.rehash();
         }
     }
     public void rehash(){
-        ProbingHashTable rehashed = new ProbingHashTable(hashFactory,(int) (Math.log(capacity)+1), maxLoadFactor);
+        ProbingHashTable rehashed = new ProbingHashTable(hashFactory,(int) (Math.log(capacity)+3), maxLoadFactor);
         for (int i = 0; i < hash.length; i++) {
             if (hash[i]!=null && hash[i].second()!=null){
                 rehashed.insert(hash[i].first(),hash[i].second());
