@@ -20,7 +20,7 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
         this.hashFactory = hashFactory;
         this.maxLoadFactor = maxLoadFactor;
         this.capacity = 1 << k;
-        this.hashFunc = hashFactory.pickHash(k);
+        this.hashFunc = hashFactory.pickHash(capacity);
         this.size = 0;
         this.hash = new Pair[capacity];
         this.utils = new HashingUtils();
@@ -32,7 +32,7 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
         else
         {
             while (hash[locationInHash].second()==null
-                    &&hash[locationInHash].first()!=key){
+                    && hash[locationInHash].first()!=key){
                 locationInHash = utils.mod(locationInHash,capacity());
                 if (hash[locationInHash]==null) return null;
             }
@@ -51,7 +51,9 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
             }
         }
         size++;
-        this.rehash();
+        if (size/capacity>maxLoadFactor){
+            this.rehash();
+        }
     }
     public void rehash(){
         ProbingHashTable rehashed = new ProbingHashTable(hashFactory,(int) (Math.log(capacity)+1), maxLoadFactor);

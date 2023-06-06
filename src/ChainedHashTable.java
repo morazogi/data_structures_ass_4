@@ -19,9 +19,12 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         this.hashFactory = hashFactory;
         this.maxLoadFactor = maxLoadFactor;
         this.capacity = 1 << k;
-        this.hashFunc = hashFactory.pickHash(k);
+        this.hashFunc = hashFactory.pickHash(capacity);
         this.size = 0;
         this.hash = new LinkedList[capacity];
+        for (int i = 0; i < capacity; i++) {
+            hash[i] = new LinkedList<>();
+        }
     }
     public V search(K key) {
         V value = null;
@@ -33,7 +36,7 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
             boolean stop = false;
             while(iter.hasNext()&!stop){
                 Pair<K,V> pair = iter.next();
-                if (key==pair.first()){
+                if (key.equals(pair.first())){
                     stop = true;
                     value = pair.second();
                 }
