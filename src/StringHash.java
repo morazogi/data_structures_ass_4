@@ -33,9 +33,9 @@ public class StringHash implements HashFactory<String> {
         public int hash(String key) {
             int ans = 0;
             int k = key.length();
-            for (int i = 1; i <= key.length(); i++) {
+            for (int i = 0; i < key.length(); i++) {
                 int x = key.charAt(i);
-                ans += utils.mod(x*(utils.mod((long) Math.pow(c,k-i) , q)), q);
+                ans += utils.mod(x*(utils.mod((long) Math.pow(c,k-(i+1)) , q)), q);
             }
             ans = utils.mod(ans,q);
             return carterWegmanHash.hash(ans);

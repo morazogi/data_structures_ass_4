@@ -1,10 +1,7 @@
-import java.util.Collections; // can be useful
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 public class HashingExperimentUtils {
-    final private static int k = 5;
+    final private static int k = 16;
     public static Pair<Double, Double> measureOperationsChained(double maxLoadFactor) {
         Random rand = new Random();
         int key = rand.nextInt();
@@ -92,16 +89,61 @@ public class HashingExperimentUtils {
         return ans;
     }
     public static Pair<Double, Double> measureLongOperations() {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        HashingUtils utils = new HashingUtils();
+        MultiplicativeShiftingHash longHash = new MultiplicativeShiftingHash();
+        ChainedHashTable<Long,Long> tatum = new ChainedHashTable(longHash,k,1);
+        double searchTimes = 0;
+        double insertTimes = 0;
+        Long[]  nums = utils.genUniqueLong(10);
+
+        for (int i = 0; i < 10; i++) {
+            long insertStart = System.nanoTime();
+            tatum.insert(nums[i],nums[i]);
+            insertTimes = insertTimes + (System.nanoTime() - insertStart);
+        }
+        for (int i = 0; i < 10; i++) {
+                long searchStart = System.nanoTime();
+                Long res = tatum.search(nums[i]);
+                searchTimes = searchTimes + (System.nanoTime() - searchStart);
+                if (res == null) throw new RuntimeException("failed at point 2");
+
+        }
+        Pair<Double,Double> ans = new Pair<Double,Double>(searchTimes/10 , insertTimes/10);
+        return ans;
     }
     public static Pair<Double, Double> measureStringOperations() {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        HashingUtils utils = new HashingUtils();
+        StringHash longHash = new StringHash();
+        ChainedHashTable<String,String> tatum = new ChainedHashTable(longHash,k,1);
+        double searchTimes = 0;
+        double insertTimes = 0;
+        List strings = utils.genUniqueStrings(10,10, 20);
+        Iterator<String> iter = strings.listIterator();
+        for (int i = 0; i < 10; i++) {
+            String Naomi = iter.next();
+            long insertStart = System.nanoTime();
+            tatum.insert(Naomi, Naomi);
+            insertTimes = insertTimes + (System.nanoTime() - insertStart);
+        }
+        iter = strings.listIterator();
+        for (int i = 0; i < 10; i++) {
+            String Naomi = iter.next();
+            long searchStart = System.nanoTime();
+            String res = tatum.search(Naomi);
+            searchTimes = searchTimes + (System.nanoTime() - searchStart);
+            if (res == null) throw new RuntimeException("failed at point 2");
+
+        }
+        Pair<Double,Double> ans = new Pair<Double,Double>(searchTimes/10 , insertTimes/10);
+        return ans;
     }
 
     public static void main(String[] args) {
-        System.out.println("--------------1-------------");
-        Pair chained = measureOperationsChained(1);
-        System.out.println("search  -  " + chained.first());
-        System.out.println("insert  -  " + chained.second());
+        Pair mlo= measureLongOperations();
+        System.out.println(mlo.first() + " = insert");
+        System.out.println(mlo.second() + " = search");
+        Pair mso= measureStringOperations();
+        System.out.println(mso.first() + " = insert");
+        System.out.println(mso.second() + " = search");
     }
 }

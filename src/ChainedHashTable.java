@@ -20,7 +20,7 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         this.hashFactory = hashFactory;
         this.maxLoadFactor = maxLoadFactor;
         this.capacity = 1 << k;
-        this.hashFunc = hashFactory.pickHash(capacity);
+        this.hashFunc = hashFactory.pickHash(k);
         this.size = 0;
         this.hash = new LinkedList[capacity];
         for (int i = 0; i < capacity; i++) {
@@ -29,7 +29,6 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         this.k = k;
     }
     public V search(K key) {
-        System.out.println("chained search");
         V value = null;
         int locationInHash = this.hashFunc.hash(key);
         if (hash[locationInHash].isEmpty()) return null;
@@ -48,7 +47,6 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         return value;
     }
     public void insert(K key, V value) {
-        System.out.println("chained insert");
         int locationInHash = this.hashFunc.hash(key);
         Pair<K,V> add = new Pair<>(key,value);
         if (search(key)==null) {
@@ -65,7 +63,6 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         }
     }
     private void rehash(){
-        System.out.println("chained rehash");
         ChainedHashTable rehashed = new ChainedHashTable(hashFactory,k+1, maxLoadFactor);
         for (int i = 0; i < hash.length; i++) {
             Iterator<Pair<K,V>> iter = hash[i].iterator();
@@ -80,7 +77,6 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         this.hash = rehashed.hash;
     }
     public boolean delete(K key) {
-        System.out.println("chained delete");
         int locationInHash = this.hashFunc.hash(key);
         if (hash[locationInHash].isEmpty()) return false;
         else

@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 public class MyDataStructure {
     /*
@@ -13,33 +12,65 @@ public class MyDataStructure {
      *
      * @param N The maximal number of items expected in the DS.
      */
-    public MyDataStructure(int N) {}
-
+    private TreeSet<Integer> treeSet;
+    private HashMap<Integer, Integer> hashMap;
+    public MyDataStructure(int N) {
+        treeSet = new TreeSet<>();
+        hashMap = new HashMap<>(N);
+    }
     /*
      * In the following functions,
      * you should REMOVE the place-holder return statements.
      */
-    public boolean insert(int value) {
-        return false;
+    public boolean insert(int val) {
+        if (hashMap.containsKey(val))
+            return false;
+
+        treeSet.add(val);
+        hashMap.put(val, 1);
+        return true;
     }
 
-    public boolean delete(int value) {
-        return false;
+    public boolean delete(int val) {
+        if (!hashMap.containsKey(val))
+            return false;
+
+        treeSet.remove(val);
+        hashMap.remove(val);
+        return true;
     }
 
-    public boolean contains(int value) {
-        return false;
+    public boolean contains(int val) {
+        return hashMap.containsKey(val);
     }
 
-    public int rank(int value) {
-        return -1;
+    public int rank(int val) {
+        return treeSet.headSet(val, true).size();
     }
+
 
     public int select(int index) {
-        return Integer.MIN_VALUE;
+        if (index < 1 || index > treeSet.size())
+            throw new IllegalArgumentException("Invalid index");
+
+        Iterator<Integer> iterator = treeSet.iterator();
+        int count = 0;
+        int result = 0;
+
+        while (iterator.hasNext()) {
+            count++;
+            result = iterator.next();
+
+            if (count == index)
+                break;
+        }
+
+        return result;
     }
 
     public List<Integer> range(int low, int high) {
-        return null;
+        SortedSet<Integer> subset = treeSet.subSet(low, true, high, true);
+        return new ArrayList<>(subset);
     }
+
 }
