@@ -8,7 +8,7 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
     private int capacity;
     private HashFunctor<K> hashFunc;
     private LinkedList<Pair<K,V>>[] hash;
-    private int size;
+    private double size;
     private int k;
     /*
      * You should add additional private members as needed.
@@ -29,6 +29,7 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         this.k = k;
     }
     public V search(K key) {
+       // System.out.println("chained search");
         V value = null;
         int locationInHash = this.hashFunc.hash(key);
         if (hash[locationInHash].isEmpty()) return null;
@@ -47,22 +48,22 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         return value;
     }
     public void insert(K key, V value) {
+       // System.out.println("chained insert");
         int locationInHash = this.hashFunc.hash(key);
         Pair<K,V> add = new Pair<>(key,value);
         if (search(key)==null) {
-            hash[locationInHash].addLast(add);
             this.size++;
+            if (size / this.capacity >= maxLoadFactor)
+                this.rehash();
+             locationInHash = this.hashFunc.hash(key);
+            hash[locationInHash].addLast(add);
+
         }
         else throw new RuntimeException("item already in the DS");
-        //
-        //to implement rehashing
-        //
-        boolean rehash = (size/capacity())>=maxLoadFactor;
-        if (rehash){
-            this.rehash();
-        }
+
     }
     private void rehash(){
+      //  System.out.println("chained rehash");
         ChainedHashTable rehashed = new ChainedHashTable(hashFactory,k+1, maxLoadFactor);
         for (int i = 0; i < hash.length; i++) {
             Iterator<Pair<K,V>> iter = hash[i].iterator();
@@ -77,6 +78,7 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         this.hash = rehashed.hash;
     }
     public boolean delete(K key) {
+        System.out.println("chained delete");
         int locationInHash = this.hashFunc.hash(key);
         if (hash[locationInHash].isEmpty()) return false;
         else

@@ -8,7 +8,7 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
     private int capacity;
     private HashFunctor<K> hashFunc;
     private Pair<K,V>[] hash;
-    private int size;
+    private double size;
     private HashingUtils utils;
     /*
      * You should add additional private members as needed.
@@ -41,20 +41,26 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
         return value;
     }
     public void insert(K key, V value) {
-        Pair add = new Pair(key, value);
-        int locationInHash = this.hashFunc.hash(key);
-        if (hash[locationInHash] == null) hash[locationInHash] = add;
-        else {
-            while (hash[locationInHash] != null) {
-                locationInHash = utils.mod(locationInHash, capacity());
-                if (hash[locationInHash] == null) hash[locationInHash] = add;
+        if (search(key) != null) {
+            Pair add = new Pair(key, value);
+            int locationInHash = this.hashFunc.hash(key);
+            if (hash[locationInHash] == null) {
+                size++;
+                boolean rehash = (size / capacity) >= maxLoadFactor;
+                if (rehash) {
+                    this.rehash();
+                    locationInHash = this.hashFunc.hash(key);
+                }
+                hash[locationInHash] = add;
+            } else {
+                while (hash[locationInHash] != null) {
+                    locationInHash = utils.mod(locationInHash, capacity());
+                    if (hash[locationInHash] == null) hash[locationInHash] = add;
+                }
             }
         }
-        size++;
-        boolean rehash = (size/capacity())>=maxLoadFactor;
-        if (rehash){
-            this.rehash();
-        }
+        else throw new RuntimeException("item already in the DS");
+
     }
     public void rehash(){
         ProbingHashTable rehashed = new ProbingHashTable(hashFactory,(int) (Math.log(capacity)+3), maxLoadFactor);

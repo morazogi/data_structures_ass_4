@@ -6,6 +6,7 @@ abstract public class AbstractSkipList {
     final protected Node head;
     final protected Node tail;
 
+
     public AbstractSkipList() {
         head = new Node(Integer.MIN_VALUE);
         tail = new Node(Integer.MAX_VALUE);
@@ -120,11 +121,15 @@ abstract public class AbstractSkipList {
         private int height;
         final private int key;
 
+        private int distance_skipped; // will indicate how many nodes has this node skipped on this level
+        private int rank; // the index of this node
+
         public Node(int key) {
             next = new ArrayList<>();
             prev = new ArrayList<>();
             this.height = -1;
             this.key = key;
+            this.distance_skipped = 0; // initializing each node at the bottom, meaning there are no skips.
         }
 
         public Node getPrev(int level) {

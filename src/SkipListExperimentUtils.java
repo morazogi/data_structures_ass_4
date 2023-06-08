@@ -92,8 +92,8 @@ public class SkipListExperimentUtils {
 
 
 //-----------
-        int x = 1000;
-        double p = 0.33;
+        int x = 50000;
+        double p = 0.9;
         double insert_expirement_sum =0;
         double search_expirement_sum =0;
         double deletion_expirement_sum =0;
