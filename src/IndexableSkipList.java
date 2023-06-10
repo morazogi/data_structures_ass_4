@@ -30,23 +30,25 @@ public class IndexableSkipList extends AbstractSkipList {
             rand = Math.random();
         }
         return ans;
-//        throw new UnsupportedOperationException("Replace this by your implementation");
+
     }
 
     public int rank(int val) {
-        Node current = find(val);
-        if (current.key() == val) {
-            int rank = 0;
-            for (int i = 0; i <= current.height(); i++) {
-                Node prev = current.getPrev(i);
-                while (prev != head) {
-                    rank++;
-                    prev = prev.getPrev(i);
-                }
-            }
-            return rank;
-        }
-        return -1;
+        Node item = search(val);
+        return item.distance_skipped[item.height()];
+//        Node current = find(val);
+//        if (current.key() == val) {
+//            int rank = 0;
+//            for (int i = 0; i <= current.height(); i++) {
+//                Node prev = current.getPrev(i);
+//                while (prev != head) {
+//                    rank++;
+//                    prev = prev.getPrev(i);
+//                }
+//            }
+//            return rank;
+//        }
+//        return -1;
     }
 
     public int select(int index) {

@@ -41,6 +41,7 @@ abstract public class AbstractSkipList {
         }
 
         Node newNode = new Node(key);
+        newNode.distance_skipped[0] = 1;
 
         for (int level = 0; level <= nodeHeight && prevNode != null; ++level) {
             Node nextNode = prevNode.getNext(level);
@@ -48,9 +49,13 @@ abstract public class AbstractSkipList {
             newNode.addLevel(nextNode, prevNode);
             prevNode.setNext(level, newNode);
             nextNode.setPrev(level, newNode);
+            if (level > 0){
+                nextNode.distance_skipped[level] = nextNode.distance_skipped[level] - newNode.distance_skipped[level];
+            }
 
             while (prevNode != null && prevNode.height() == level) {
                 prevNode = prevNode.getPrev(level);
+
             }
         }
 
@@ -63,6 +68,9 @@ abstract public class AbstractSkipList {
             Node next = node.getNext(level);
             prev.setNext(level, next);
             next.setPrev(level, prev);
+            next.distance_skipped[level] =+ 1;
+
+
         }
 
         return true;
@@ -121,15 +129,15 @@ abstract public class AbstractSkipList {
         private int height;
         final private int key;
 
-        private int distance_skipped; // will indicate how many nodes has this node skipped on this level
-        private int rank; // the index of this node
+        int[] distance_skipped = new int[height];
 
         public Node(int key) {
             next = new ArrayList<>();
             prev = new ArrayList<>();
             this.height = -1;
             this.key = key;
-            this.distance_skipped = 0; // initializing each node at the bottom, meaning there are no skips.
+
+
         }
 
         public Node getPrev(int level) {
