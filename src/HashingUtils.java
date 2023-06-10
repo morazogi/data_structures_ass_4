@@ -49,17 +49,17 @@ public class HashingUtils {
 
     public List<String> genUniqueStrings(int numOfItemsToGen, int stringMinLength, int stringMaxLength) {
         return rand.ints(stringMinLength, stringMaxLength)
-                   .limit(numOfItemsToGen)
-                   .mapToObj(length -> rand.ints(a_ASCII,
-                                                 z_ASCII
-                                                 + 1)
-                                           .limit(length)
-                                           .collect(StringBuilder::new,
-                                                    StringBuilder::appendCodePoint,
-                                                    StringBuilder::append)
-                                           .toString())
-                   .distinct()
-                   .collect(Collectors.toList());
+                .limit(numOfItemsToGen)
+                .mapToObj(length -> rand.ints(a_ASCII,
+                                z_ASCII
+                                        + 1)
+                        .limit(length)
+                        .collect(StringBuilder::new,
+                                StringBuilder::appendCodePoint,
+                                StringBuilder::append)
+                        .toString())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private static Pair<Integer, Long> calculateEvenDivisorSplit(long num) {

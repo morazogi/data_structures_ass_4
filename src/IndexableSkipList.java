@@ -34,35 +34,36 @@ public class IndexableSkipList extends AbstractSkipList {
     }
 
     public int rank(int val) {
-        Node item = search(val);
-        return item.distance_skipped[item.height()];
-//        Node current = find(val);
-//        if (current.key() == val) {
-//            int rank = 0;
-//            for (int i = 0; i <= current.height(); i++) {
-//                Node prev = current.getPrev(i);
-//                while (prev != head) {
-//                    rank++;
-//                    prev = prev.getPrev(i);
-//                }
-//            }
-//            return rank;
-//        }
-//        return -1;
+        int rank = 0;
+        Node current =this.head;
+        int level = current.height();
+        while (val >= current.key() && level>0){
+            if (current.getNext(level) == tail || current.getNext(level).key()>val){
+                level--;
+            } else if (current.getNext(level).key()<val) {
+                current = current.getNext(level);
+                rank += current.distance_skipped[level];
+            } else {
+                return rank;
+            }
+        }
+        return -1;
     }
 
     public int select(int index) {
-        int count = -1;
-        for (int i = 0; i <= head.height(); i++) {
-            Node current = head.getNext(i);
-            while (current != tail) {
-                count++;
-                if (count == index) {
-                    return current.key();
-                }
-                current = current.getNext(i);
+        int rank = 0;
+        Node current =this.head;
+        int level = current.height();
+        while (rank<index){
+            if (current.getNext(level) == tail || rank + current.getNext(level).distance_skipped[level]>index){
+                level--;
+            } else if (rank + current.getNext(level).distance_skipped[level]<index) {
+                current = current.getNext(level);
+                rank += current.distance_skipped[level];
+            } else {
+                return current.getNext(level).key();
             }
         }
-        return 0;
+        return -1;
     }
 }
